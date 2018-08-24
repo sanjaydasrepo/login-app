@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -14,7 +16,7 @@
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_title"
+            android:text="DASHBOARD"
             android:textSize="20sp" />
 
         <android.support.v7.widget.AppCompatTextView
@@ -42,7 +44,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewUsers"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>
 
