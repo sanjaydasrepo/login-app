@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.appCompatButtonLogin:
-                verifyFromSQLite();
+                //verifyFromSQLite();
                 break;
             case R.id.textViewLinkRegister:
                 // Navigate to RegisterActivity
@@ -98,6 +98,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intentRegister);
                 break;
         }
+    }
+
+    private void verifyFromApi(){
+
     }
 
     /**
