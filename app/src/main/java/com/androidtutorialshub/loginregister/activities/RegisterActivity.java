@@ -105,13 +105,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
 
             case R.id.appCompatButtonRegister:
-                postDataToSQLite();
+               // postDataToSQLite();
+                postDataToApi();
                 break;
 
             case R.id.appCompatTextViewLoginLink:
                 finish();
                 break;
         }
+    }
+
+    private void postDataToApi() {
+
     }
 
     /**
