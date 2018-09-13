@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.androidtutorialshub.loginregister"
-        minSdkVersion 24
+        minSdkVersion 22
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

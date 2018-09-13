@@ -9,26 +9,32 @@
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@color/colorPrimary"
+        android:background="#c1ebe5"
         android:gravity="center"
         android:orientation="vertical">
 
         <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DASHBOARD"
-            android:textSize="20sp" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/text_hello" />
+            android:text="@string/text_hello"
+            android:textSize="20dp"
+            android:textColor="#448799"/>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textViewName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="#5ea5bf"
+            android:layout_marginTop="10dp"
+            android:textSize="15dp"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/logout" />
 
     </android.support.v7.widget.LinearLayoutCompat>
 

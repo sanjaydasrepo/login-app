@@ -1,5 +1,7 @@
 package com.androidtutorialshub.loginregister.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -9,12 +11,24 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.androidtutorialshub.loginregister.R;
 import com.androidtutorialshub.loginregister.helpers.InputValidation;
+import com.androidtutorialshub.loginregister.model.Login;
+import com.androidtutorialshub.loginregister.model.Register;
 import com.androidtutorialshub.loginregister.model.User;
+import com.androidtutorialshub.loginregister.network.ApiInterface;
+import com.androidtutorialshub.loginregister.network.ApiUtils;
 import com.androidtutorialshub.loginregister.sql.DatabaseHelper;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by lalit on 8/27/2016.
@@ -41,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private InputValidation inputValidation;
     private DatabaseHelper databaseHelper;
     private User user;
+    private ApiInterface mApiService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +87,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         appCompatButtonRegister = (AppCompatButton) findViewById(R.id.appCompatButtonRegister);
 
         appCompatTextViewLoginLink = (AppCompatTextView) findViewById(R.id.appCompatTextViewLoginLink);
+
+        mApiService = ApiUtils.getAPIService();
 
     }
 
@@ -115,8 +132,47 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    private void postDataToApi() {
+    public void postDataToApi(){
+         Register register = new Register();
 
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextName, textInputLayoutName, getString(R.string.error_message_name))) {
+            return;
+        }
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
+            return;
+        }
+        if (!inputValidation.isInputEditTextEmail(textInputEditTextEmail, textInputLayoutEmail, getString(R.string.error_message_email))) {
+            return;
+        }
+        if (!inputValidation.isInputEditTextFilled(textInputEditTextPassword, textInputLayoutPassword, getString(R.string.error_message_password))) {
+            return;
+        }
+        if (!inputValidation.isInputEditTextMatches(textInputEditTextPassword, textInputEditTextConfirmPassword,
+                textInputLayoutConfirmPassword, getString(R.string.error_password_match))) {
+            return;
+        }
+
+
+        register.setEmail(textInputEditTextEmail.getText().toString().trim());
+        register.setPassword(textInputEditTextPassword.getText().toString().trim());
+        register.setUserName(textInputEditTextName.getText().toString().trim());
+        mApiService.saveUser( register )
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if (response.isSuccessful()){
+                            Log.d("Result " , response.toString());
+                            Toast.makeText(getApplicationContext(), response.toString() ,Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), t.toString() ,Toast.LENGTH_LONG)
+                                .show();
+                    }
+                });
     }
 
     /**

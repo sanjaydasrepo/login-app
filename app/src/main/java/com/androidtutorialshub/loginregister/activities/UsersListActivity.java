@@ -2,6 +2,8 @@ package com.androidtutorialshub.loginregister.activities;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.androidtutorialshub.loginregister.R;
 import com.androidtutorialshub.loginregister.adapters.UsersRecyclerAdapter;
@@ -35,6 +38,7 @@ public class UsersListActivity extends AppCompatActivity {
     private List<User> listUsers;
     private UsersRecyclerAdapter usersRecyclerAdapter;
     private DatabaseHelper databaseHelper;
+    private ImageView mLogoutBtn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +86,24 @@ public class UsersListActivity extends AppCompatActivity {
     private void initViews() {
         textViewName = (AppCompatTextView) findViewById(R.id.textViewName);
         recyclerViewUsers = (RecyclerView) findViewById(R.id.recyclerViewUsers);
+        mLogoutBtn = findViewById(R.id.imageView);
+        mLogoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+    }
+
+    private void logout() {
+        SharedPreferences settings = getSharedPreferences("Login", 0);
+        settings.edit()
+                .putString("email", null )
+                .putString("password" ,null)
+                .commit();
+
+        Intent intent = new Intent( getApplicationContext() , LoginActivity.class);
+        startActivity(intent);
     }
 
     /**
