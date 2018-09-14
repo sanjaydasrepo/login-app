@@ -13,7 +13,7 @@ import com.androidtutorialshub.loginregister.model.User;
 import java.util.List;
 
 /**
- * Created by lalit on 10/10/2016.
+ * Created by Sanjay on 10/10/2016.
  */
 
 public class UsersRecyclerAdapter extends RecyclerView.Adapter<UsersRecyclerAdapter.UserViewHolder> {

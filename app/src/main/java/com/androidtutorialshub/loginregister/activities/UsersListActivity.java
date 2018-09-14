@@ -35,9 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by lalit on 10/10/2016.
- */
+
 
 public class UsersListActivity extends AppCompatActivity {
 
@@ -123,18 +121,18 @@ public class UsersListActivity extends AppCompatActivity {
      * This method is to initialize objects to be used
      */
     private void initObjects() {
-//        listUsers = new ArrayList<>();
-//        usersRecyclerAdapter = new UsersRecyclerAdapter(listUsers);
-//
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        recyclerViewUsers.setLayoutManager(mLayoutManager);
-//        recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
-//        recyclerViewUsers.setHasFixedSize(true);
-//        recyclerViewUsers.setAdapter(usersRecyclerAdapter);
-//        databaseHelper = new DatabaseHelper(activity);
-//
-//        String emailFromIntent = getIntent().getStringExtra("EMAIL");
-//        textViewName.setText(emailFromIntent);
+        listUsers = new ArrayList<>();
+        usersRecyclerAdapter = new UsersRecyclerAdapter(listUsers);
+
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerViewUsers.setLayoutManager(mLayoutManager);
+        recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewUsers.setHasFixedSize(true);
+        recyclerViewUsers.setAdapter(usersRecyclerAdapter);
+        databaseHelper = new DatabaseHelper(activity);
+
+        String emailFromIntent = getIntent().getStringExtra("EMAIL");
+        textViewName.setText(emailFromIntent);
 //
        // getDataFromSQLite();
 
@@ -143,22 +141,37 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     private void getAllUsers() {
-        mApiService.allUsers()
-                .enqueue(new Callback<List<UserResp>>() {
-                    @Override
-                    public void onResponse(Call<List<UserResp>> call, Response<List<UserResp>> response) {
-                        if( response.isSuccessful() ){
-                            Toast.makeText(getApplicationContext(), response.body().size() ,Toast.LENGTH_LONG)
-                                    .show();
+        if( listUsers  != null)
+        listUsers.clear();
+        Call<List<UserResp>> users = mApiService.allUsers();
+        users.enqueue(new Callback<List<UserResp>>() {
+            @Override
+            public void onResponse(Call<List<UserResp>> call, Response<List<UserResp>> response) {
+
+                if( response.isSuccessful() ){
+                            List<UserResp> users = response.body();
+
+                            User user ;
+                            for( UserResp b:users){
+                                user = new User();
+                                user.setEmail( b.getEmail() );
+                                user.setId(Integer.parseInt(b.getUserId()));
+                                user.setName(b.getUserName());
+                                user.setPassword(b.getPassword());
+                                listUsers.add( user );
+                            }
+
+                            usersRecyclerAdapter.notifyDataSetChanged();
+
                         }
 
-                    }
+            }
 
-                    @Override
-                    public void onFailure(Call<List<UserResp>> call, Throwable t) {
+            @Override
+            public void onFailure(Call<List<UserResp>> call, Throwable t) {
 
-                    }
-                });
+            }
+        });
     }
 
     private void getApiData() {
@@ -166,22 +179,7 @@ public class UsersListActivity extends AppCompatActivity {
                 .enqueue(new Callback<List<Book>>() {
                     @Override
                     public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-//                        if( response.isSuccessful() ){
-//                            List<Book> books = response.body();
-//                            listUsers.clear();
-//                            User user ;
-//                            for( Book b:books){
-//                                user = new User();
-//                                user.setEmail( b.getTitle() );
-//                                user.setId(b.getId());
-//                                user.setName(b.getAuthor());
-//                                user.setPassword("Book");
-//                                listUsers.add( user );
-//                            }
 //
-//                            usersRecyclerAdapter.notifyDataSetChanged();
-//
-//                        }
 
                         Toast.makeText(getApplicationContext(), response.body().size() +" is registered" ,Toast.LENGTH_LONG)
                                 .show();

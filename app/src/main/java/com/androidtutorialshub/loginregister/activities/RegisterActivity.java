@@ -31,9 +31,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by lalit on 8/27/2016.
- */
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final AppCompatActivity activity = RegisterActivity.this;

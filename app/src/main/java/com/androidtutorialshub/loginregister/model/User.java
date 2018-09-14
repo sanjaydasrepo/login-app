@@ -1,7 +1,7 @@
 package com.androidtutorialshub.loginregister.model;
 
 /**
- * Created by lalit on 9/12/2016.
+ * Created by Sanjay on 9/12/2016.
  */
 public class User {
 
