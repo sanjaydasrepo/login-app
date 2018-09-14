@@ -17,14 +17,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.androidtutorialshub.loginregister.R;
 import com.androidtutorialshub.loginregister.adapters.UsersRecyclerAdapter;
+import com.androidtutorialshub.loginregister.model.Book;
 import com.androidtutorialshub.loginregister.model.User;
+import com.androidtutorialshub.loginregister.model.UserResp;
+import com.androidtutorialshub.loginregister.network.ApiInterface;
+import com.androidtutorialshub.loginregister.network.ApiUtils;
 import com.androidtutorialshub.loginregister.sql.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by lalit on 10/10/2016.
@@ -39,6 +48,7 @@ public class UsersListActivity extends AppCompatActivity {
     private UsersRecyclerAdapter usersRecyclerAdapter;
     private DatabaseHelper databaseHelper;
     private ImageView mLogoutBtn;
+    private ApiInterface mApiService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +64,8 @@ public class UsersListActivity extends AppCompatActivity {
         initViews();
         initObjects();
         sendNotification();
+
+
 
     }
 
@@ -86,6 +98,7 @@ public class UsersListActivity extends AppCompatActivity {
     private void initViews() {
         textViewName = (AppCompatTextView) findViewById(R.id.textViewName);
         recyclerViewUsers = (RecyclerView) findViewById(R.id.recyclerViewUsers);
+        mApiService = ApiUtils.getAPIService();
         mLogoutBtn = findViewById(R.id.imageView);
         mLogoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,20 +123,75 @@ public class UsersListActivity extends AppCompatActivity {
      * This method is to initialize objects to be used
      */
     private void initObjects() {
-        listUsers = new ArrayList<>();
-        usersRecyclerAdapter = new UsersRecyclerAdapter(listUsers);
+//        listUsers = new ArrayList<>();
+//        usersRecyclerAdapter = new UsersRecyclerAdapter(listUsers);
+//
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        recyclerViewUsers.setLayoutManager(mLayoutManager);
+//        recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
+//        recyclerViewUsers.setHasFixedSize(true);
+//        recyclerViewUsers.setAdapter(usersRecyclerAdapter);
+//        databaseHelper = new DatabaseHelper(activity);
+//
+//        String emailFromIntent = getIntent().getStringExtra("EMAIL");
+//        textViewName.setText(emailFromIntent);
+//
+       // getDataFromSQLite();
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerViewUsers.setLayoutManager(mLayoutManager);
-        recyclerViewUsers.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewUsers.setHasFixedSize(true);
-        recyclerViewUsers.setAdapter(usersRecyclerAdapter);
-        databaseHelper = new DatabaseHelper(activity);
+        getAllUsers();
+        //getApiData();
+    }
 
-        String emailFromIntent = getIntent().getStringExtra("EMAIL");
-        textViewName.setText(emailFromIntent);
+    private void getAllUsers() {
+        mApiService.allUsers()
+                .enqueue(new Callback<List<UserResp>>() {
+                    @Override
+                    public void onResponse(Call<List<UserResp>> call, Response<List<UserResp>> response) {
+                        if( response.isSuccessful() ){
+                            Toast.makeText(getApplicationContext(), response.body().size() ,Toast.LENGTH_LONG)
+                                    .show();
+                        }
 
-        getDataFromSQLite();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<UserResp>> call, Throwable t) {
+
+                    }
+                });
+    }
+
+    private void getApiData() {
+        mApiService.allBooks()
+                .enqueue(new Callback<List<Book>>() {
+                    @Override
+                    public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
+//                        if( response.isSuccessful() ){
+//                            List<Book> books = response.body();
+//                            listUsers.clear();
+//                            User user ;
+//                            for( Book b:books){
+//                                user = new User();
+//                                user.setEmail( b.getTitle() );
+//                                user.setId(b.getId());
+//                                user.setName(b.getAuthor());
+//                                user.setPassword("Book");
+//                                listUsers.add( user );
+//                            }
+//
+//                            usersRecyclerAdapter.notifyDataSetChanged();
+//
+//                        }
+
+                        Toast.makeText(getApplicationContext(), response.body().size() +" is registered" ,Toast.LENGTH_LONG)
+                                .show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Book>> call, Throwable t) {
+
+                    }
+                });
     }
 
     /**

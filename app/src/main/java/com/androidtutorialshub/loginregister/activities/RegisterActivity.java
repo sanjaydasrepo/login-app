@@ -22,6 +22,7 @@ import com.androidtutorialshub.loginregister.helpers.InputValidation;
 import com.androidtutorialshub.loginregister.model.Login;
 import com.androidtutorialshub.loginregister.model.Register;
 import com.androidtutorialshub.loginregister.model.User;
+import com.androidtutorialshub.loginregister.model.UserResp;
 import com.androidtutorialshub.loginregister.network.ApiInterface;
 import com.androidtutorialshub.loginregister.network.ApiUtils;
 import com.androidtutorialshub.loginregister.sql.DatabaseHelper;
@@ -156,20 +157,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         register.setEmail(textInputEditTextEmail.getText().toString().trim());
         register.setPassword(textInputEditTextPassword.getText().toString().trim());
         register.setUserName(textInputEditTextName.getText().toString().trim());
-        mApiService.saveUser( register )
-                .enqueue(new Callback<String>() {
+        mApiService.saveUser(register)
+                .enqueue(new Callback<UserResp>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.isSuccessful()){
-                            Log.d("Result " , response.toString());
-                            Toast.makeText(getApplicationContext(), response.toString() ,Toast.LENGTH_LONG)
+                    public void onResponse(Call<UserResp> call, Response<UserResp> response) {
+                        if( response.isSuccessful() ){
+                            Toast.makeText(getApplicationContext(), response.body().getUserName() +" is registered" ,Toast.LENGTH_LONG)
                                     .show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), t.toString() ,Toast.LENGTH_LONG)
+                    public void onFailure(Call<UserResp> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), " Something went wrong" ,Toast.LENGTH_LONG)
                                 .show();
                     }
                 });
